@@ -4,6 +4,30 @@
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
+# Download AI models for demo app
+def download_ai_models
+  assets_dir = File.expand_path('../assets', __dir__)
+  FileUtils.mkdir_p(assets_dir)
+
+  release_version = 'v1.0.0'
+  base_url = "https://github.com/robert008/flutter_doclayout_kit/releases/download/#{release_version}"
+  models = ['pp_doclayout_m.onnx', 'pp_doclayout_l.onnx']
+
+  models.each do |model_name|
+    model_path = File.join(assets_dir, model_name)
+    if File.exist?(model_path)
+      puts "[#{model_name}] Already exists, skipping..."
+    else
+      puts "[#{model_name}] Downloading..."
+      download_url = "#{base_url}/#{model_name}"
+      system("curl -L -o '#{model_path}' '#{download_url}'")
+      puts "[#{model_name}] Downloaded successfully"
+    end
+  end
+end
+
+download_ai_models
+
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,

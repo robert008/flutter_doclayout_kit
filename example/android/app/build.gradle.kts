@@ -5,6 +5,36 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val assetsDir = file("../../assets")
+val releaseVersion = "v1.0.0"
+val modelBaseUrl = "https://github.com/robert008/flutter_doclayout_kit/releases/download/$releaseVersion"
+
+tasks.register("downloadAiModels") {
+    doLast {
+        assetsDir.mkdirs()
+
+        val models = listOf("pp_doclayout_m.onnx", "pp_doclayout_l.onnx")
+
+        models.forEach { modelName ->
+            val modelFile = file("${assetsDir}/${modelName}")
+            if (modelFile.exists()) {
+                println("[$modelName] Already exists, skipping...")
+            } else {
+                println("[$modelName] Downloading...")
+                val downloadUrl = "$modelBaseUrl/$modelName"
+                ant.withGroovyBuilder {
+                    "get"("src" to downloadUrl, "dest" to modelFile, "skipexisting" to "false")
+                }
+                println("[$modelName] Downloaded successfully")
+            }
+        }
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn("downloadAiModels")
+}
+
 android {
     namespace = "com.robert008.flutter_doclayout_kit_example"
     compileSdk = flutter.compileSdkVersion
