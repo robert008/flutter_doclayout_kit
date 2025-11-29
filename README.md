@@ -45,18 +45,32 @@ dependencies:
 
 ### 2. Download AI Model
 
-Download the ONNX model from [GitHub Releases](https://github.com/robert008/flutter_doclayout_kit/releases) and add it to your app's assets:
+Download the ONNX model from [GitHub Releases](https://github.com/robert008/flutter_doclayout_kit/releases):
 
 | Model | Size | Description |
 |-------|------|-------------|
 | pp_doclayout_m.onnx | 22 MB | Medium model (faster) |
 | pp_doclayout_l.onnx | 123 MB | Large model (more accurate) |
 
-Add to `pubspec.yaml`:
+**Steps:**
+
+1. Create `assets/` folder in your project root
+2. Download the model file and place it in `assets/`
+3. Register in `pubspec.yaml`:
+
 ```yaml
 flutter:
   assets:
     - assets/pp_doclayout_m.onnx
+```
+
+Your project structure should look like:
+```
+your_app/
+  assets/
+    pp_doclayout_m.onnx    <-- AI model here
+  lib/
+  pubspec.yaml
 ```
 
 ### 3. Platform Setup
