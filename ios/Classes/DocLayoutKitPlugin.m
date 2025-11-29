@@ -16,5 +16,15 @@ extern const char* getVersion(void);
 
     volatile const char* version = getVersion();
     NSLog(@"DocLayoutKit: Version check completed: %s", version);
+
+    // Force symbols to be retained by referencing them
+    // These calls use invalid parameters so they won't actually execute
+    if (version == NULL) {
+        initModel("/nonexistent");
+        detectLayout("/nonexistent", 0.0f);
+        detectLayoutFromBytes(NULL, 0, 0, 0, 0.0f);
+        freeString(NULL);
+    }
+    NSLog(@"DocLayoutKit: All symbols retained");
 }
 @end
