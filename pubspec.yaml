@@ -1,7 +1,9 @@
 name: flutter_doclayout_kit
-description: "A new Flutter project."
-version: 0.0.1
-homepage:
+description: "A Flutter plugin for document layout detection using PP-DocLayout model. Detects 23 document element types including text, images, tables, and formulas."
+version: 1.0.0
+homepage: https://github.com/robert008/flutter_doclayout_kit
+repository: https://github.com/robert008/flutter_doclayout_kit
+issue_tracker: https://github.com/robert008/flutter_doclayout_kit/issues
 
 environment:
   sdk: ^3.7.2

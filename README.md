@@ -1,92 +1,182 @@
-# flutter_doclayout_kit
+# Flutter DocLayout Kit
 
-A new Flutter project.
+A Flutter plugin for document layout detection using PP-DocLayout model. This plugin provides on-device AI-powered document analysis for iOS and Android.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter
-[FFI plugin](https://flutter.dev/to/ffi-package),
-a specialized package that includes native code directly invoked with Dart FFI.
+- On-device document layout detection (no internet required)
+- Detects 23 document element types (text, images, tables, formulas, etc.)
+- High-performance native implementation using ONNX Runtime
+- Supports image file and raw bytes input
+- Cross-platform: iOS and Android
 
-## Project structure
+## Supported Document Elements
 
-This template uses the following structure:
+| ID | Element Type | ID | Element Type |
+|----|--------------|----| -------------|
+| 0 | paragraph_title | 12 | footnote |
+| 1 | image | 13 | header |
+| 2 | text | 14 | algorithm |
+| 3 | number | 15 | footer |
+| 4 | abstract | 16 | seal |
+| 5 | content | 17 | chart_title |
+| 6 | figure_title | 18 | chart |
+| 7 | formula | 19 | formula_number |
+| 8 | table | 20 | header_image |
+| 9 | table_title | 21 | footer_image |
+| 10 | reference | 22 | aside_text |
+| 11 | doc_title | | |
 
-* `src`: Contains the native source code, and a CmakeFile.txt file for building
-  that source code into a dynamic library.
+## Installation
 
-* `lib`: Contains the Dart code that defines the API of the plugin, and which
-  calls into the native code using `dart:ffi`.
-
-* platform folders (`android`, `ios`, `windows`, etc.): Contains the build files
-  for building and bundling the native code library with the platform application.
-
-## Building and bundling native code
-
-The `pubspec.yaml` specifies FFI plugins as follows:
-
-```yaml
-  plugin:
-    platforms:
-      some_platform:
-        ffiPlugin: true
-```
-
-This configuration invokes the native build for the various target platforms
-and bundles the binaries in Flutter applications using these FFI plugins.
-
-This can be combined with dartPluginClass, such as when FFI is used for the
-implementation of one platform in a federated plugin:
+### 1. Add Dependency
 
 ```yaml
-  plugin:
-    implements: some_other_plugin
-    platforms:
-      some_platform:
-        dartPluginClass: SomeClass
-        ffiPlugin: true
+dependencies:
+  flutter_doclayout_kit:
+    git:
+      url: https://github.com/robert008/flutter_doclayout_kit.git
+      ref: v1.0.0
 ```
 
-A plugin can have both FFI and method channels:
+### 2. Download AI Model
 
+Download the ONNX model from [GitHub Releases](https://github.com/robert008/flutter_doclayout_kit/releases) and add it to your app's assets:
+
+| Model | Size | Description |
+|-------|------|-------------|
+| pp_doclayout_m.onnx | 22 MB | Medium model (faster) |
+| pp_doclayout_l.onnx | 123 MB | Large model (more accurate) |
+
+Add to `pubspec.yaml`:
 ```yaml
-  plugin:
-    platforms:
-      some_platform:
-        pluginClass: SomeName
-        ffiPlugin: true
+flutter:
+  assets:
+    - assets/pp_doclayout_m.onnx
 ```
 
-The native build systems that are invoked by FFI (and method channel) plugins are:
+### 3. Platform Setup
 
-* For Android: Gradle, which invokes the Android NDK for native builds.
-  * See the documentation in android/build.gradle.
-* For iOS and MacOS: Xcode, via CocoaPods.
-  * See the documentation in ios/flutter_doclayout_kit.podspec.
-  * See the documentation in macos/flutter_doclayout_kit.podspec.
-* For Linux and Windows: CMake.
-  * See the documentation in linux/CMakeLists.txt.
-  * See the documentation in windows/CMakeLists.txt.
+**iOS**: Run `pod install` in your iOS directory. The native library will be downloaded automatically.
 
-## Binding to native code
+**Android**: The native library will be downloaded automatically on first build.
 
-To use the native code, bindings in Dart are needed.
-To avoid writing these by hand, they are generated from the header file
-(`src/flutter_doclayout_kit.h`) by `package:ffigen`.
-Regenerate the bindings by running `dart run ffigen --config ffigen.yaml`.
+## Usage
 
-## Invoking native code
+### Basic Usage
 
-Very short-running native functions can be directly invoked from any isolate.
-For example, see `sum` in `lib/flutter_doclayout_kit.dart`.
+```dart
+import 'package:flutter_doclayout_kit/flutter_doclayout_kit.dart';
 
-Longer-running functions should be invoked on a helper isolate to avoid
-dropping frames in Flutter applications.
-For example, see `sumAsync` in `lib/flutter_doclayout_kit.dart`.
+// Initialize with model path
+final modelPath = await getModelPath(); // Get from your assets
+DocLayoutKit.init(modelPath);
 
-## Flutter help
+// Detect from image file
+final result = DocLayoutKit.detectFromFile(
+  '/path/to/document.jpg',
+  confThreshold: 0.5,
+);
 
-For help getting started with Flutter, view our
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+// Process results
+if (result.isSuccess) {
+  print('Found ${result.count} elements');
+  print('Inference time: ${result.inferenceTimeMs}ms');
 
+  for (final box in result.detections) {
+    print('${box.className}: ${box.score.toStringAsFixed(2)}');
+    print('  Position: (${box.x1}, ${box.y1}) - (${box.x2}, ${box.y2})');
+  }
+}
+```
+
+### Detect from Camera/Memory
+
+```dart
+// For camera frames or in-memory images
+final result = DocLayoutKit.detectFromBytes(
+  imageBytes,
+  width: 1920,
+  height: 1080,
+  channels: 3, // RGB
+  confThreshold: 0.5,
+);
+```
+
+### Filter Results
+
+```dart
+// Filter by element type
+final tables = result.filterByClass(DocLayoutClass.table);
+final images = result.filterByClass(DocLayoutClass.image);
+
+// Filter by confidence score
+final highConfidence = result.filterByScore(0.8);
+```
+
+## API Reference
+
+### DocLayoutKit
+
+| Method | Description |
+|--------|-------------|
+| `init(String modelPath)` | Initialize with ONNX model path |
+| `detectFromFile(String path, {double confThreshold})` | Detect from image file |
+| `detectFromBytes(Uint8List data, {int width, int height, int channels, double confThreshold})` | Detect from raw bytes |
+| `isInitialized` | Check if initialized |
+| `version` | Get library version |
+
+### DetectionResult
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `detections` | `List<DetectionBox>` | List of detected elements |
+| `count` | `int` | Number of detections |
+| `inferenceTimeMs` | `int` | Inference time in ms |
+| `imageWidth` | `int` | Original image width |
+| `imageHeight` | `int` | Original image height |
+| `isSuccess` | `bool` | Check if successful |
+| `hasError` | `bool` | Check if has error |
+
+### DetectionBox
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `x1, y1, x2, y2` | `double` | Bounding box coordinates |
+| `score` | `double` | Confidence score (0-1) |
+| `classId` | `int` | Element class ID (0-22) |
+| `className` | `String` | Element class name |
+| `layoutClass` | `DocLayoutClass?` | Enum value |
+
+## Requirements
+
+- Flutter >= 3.3.0
+- Dart >= 3.0.0
+- iOS >= 12.0
+- Android minSdk >= 21
+
+## Run Example App
+
+```bash
+git clone https://github.com/robert008/flutter_doclayout_kit.git
+cd flutter_doclayout_kit/example
+flutter run
+```
+
+The example app will automatically download the required model and native libraries.
+
+## Building from Source
+
+If you want to build the native libraries yourself, the C++ source code is available in the `src/` directory.
+
+## License
+
+Apache License 2.0
+
+See [LICENSE](LICENSE) for details.
+
+## Acknowledgments
+
+- [PP-DocLayout](https://github.com/PaddlePaddle/PaddleOCR) - Document layout analysis model by PaddlePaddle
+- [ONNX Runtime](https://onnxruntime.ai/) - Cross-platform inference engine
+- [OpenCV](https://opencv.org/) - Image processing library
