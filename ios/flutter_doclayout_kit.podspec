@@ -8,8 +8,12 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
 
   s.source_files = 'Classes/**/*.{h,m}'
-
   s.vendored_libraries = 'libflutter_doclayout_kit.a'
+  s.preserve_paths = 'download_library.sh'
+
+  s.prepare_command = <<-CMD
+    ./download_library.sh
+  CMD
 
   s.ios.deployment_target = '12.0'
   s.static_framework = true
