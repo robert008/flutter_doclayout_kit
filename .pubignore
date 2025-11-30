@@ -1,0 +1,29 @@
+# Native libraries (downloaded automatically)
+ios/libflutter_doclayout_kit.a
+android/src/main/jniLibs/
+
+# AI models
+*.onnx
+ai_model/
+
+# Example app
+example/
+
+# Documentation
+doc/
+
+# Build artifacts
+build/
+.dart_tool/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Scripts
+scripts/
+
+# Claude
+.claude/
+CLAUDE.md
