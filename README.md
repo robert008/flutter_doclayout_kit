@@ -35,12 +35,18 @@ https://github.com/user-attachments/assets/7c348a4a-675f-46d2-b8a2-f798082b5245
 
 ### 1. Add Dependency
 
+**From pub.dev (recommended):**
+```yaml
+dependencies:
+  flutter_doclayout_kit: ^1.0.0
+```
+
+**Or from GitHub:**
 ```yaml
 dependencies:
   flutter_doclayout_kit:
     git:
       url: https://github.com/robert008/flutter_doclayout_kit.git
-      ref: v1.0.0
 ```
 
 ### 2. Download AI Model
