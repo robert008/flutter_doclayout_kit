@@ -4,13 +4,41 @@ A Flutter plugin for document layout detection using PP-DocLayout model. This pl
 
 ## Screenshots
 
-| | | |
-|:---:|:---:|:---:|
-| ![Offline Detection](screenshots/layout_offline.PNG) | ![Real-time Scan](screenshots/layout_scan.PNG) | ![Camera Overlay](screenshots/layout_camera.PNG) |
-| Offline on-device layout detection | Real-time document scanning | Live camera overlay |
-| | | |
-| ![Form Generation](screenshots/layout_form.PNG) | ![Layout Detection](screenshots/layout_detect.PNG) | |
-| Auto-generated editable form fields | Accurate layout detection | |
+### End-to-end document layout workflow
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshots/layout_offline.PNG" width="260" alt="Offline layout detection"/>
+      <br/>
+      <sub><b>1. Offline layout</b><br/>On-device layout inference (~1s per image), no network required.</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/layout_detect.PNG" width="260" alt="Static image layout analysis"/>
+      <br/>
+      <sub><b>2. Static detection</b><br/>Analyzes document structure from test images (titles, text, tables, images).</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="screenshots/layout_form.PNG" width="260" alt="Form reconstruction"/>
+      <br/>
+      <sub><b>3. Form reconstruction</b><br/>Turns detected layout blocks into editable fields and HTML-friendly structure.</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/layout_camera.PNG" width="260" alt="Camera capture with layout overlay"/>
+      <br/>
+      <sub><b>4. Camera capture</b><br/>Capture photos and preview layout boxes directly in the camera view.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="screenshots/layout_scan.PNG" width="260" alt="Real-time document scanning"/>
+      <br/>
+      <sub><b>5. Real-time scan</b><br/>Continuous layout detection on live camera frames for scanning workflows.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Demo Video
 
