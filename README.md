@@ -2,7 +2,17 @@
 
 A Flutter plugin for document layout detection using PP-DocLayout model. This plugin provides on-device AI-powered document analysis for iOS and Android.
 
-## Demo
+## Screenshots
+
+| | | |
+|:---:|:---:|:---:|
+| ![Offline Detection](screenshots/layout_offline.PNG) | ![Real-time Scan](screenshots/layout_scan.PNG) | ![Camera Overlay](screenshots/layout_camera.PNG) |
+| Offline on-device layout detection | Real-time document scanning | Live camera overlay |
+| | | |
+| ![Form Generation](screenshots/layout_form.PNG) | ![Layout Detection](screenshots/layout_detect.PNG) | |
+| Auto-generated editable form fields | Accurate layout detection | |
+
+## Demo Video
 
 https://github.com/user-attachments/assets/7c348a4a-675f-46d2-b8a2-f798082b5245
 
