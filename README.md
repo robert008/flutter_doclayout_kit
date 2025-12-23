@@ -231,6 +231,12 @@ The example app will automatically download the required model and native librar
 
 If you want to build the native libraries yourself, the C++ source code is available in the `src/` directory.
 
+## Author
+
+**Robert Chuang**
+- Email: figo007007@gmail.com
+- LinkedIn: https://www.linkedin.com/in/robert-chuang-88090932b
+
 ## License
 
 Apache License 2.0
