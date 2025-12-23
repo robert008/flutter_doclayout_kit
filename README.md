@@ -243,6 +243,11 @@ Apache License 2.0
 
 See [LICENSE](LICENSE) for details.
 
+## Related Projects
+
+- [flutter_document_capture](https://github.com/robert008/flutter_document_capture) - Document capture preprocessing (corner detection, perspective correction)
+- [flutter_ocr_kit](https://github.com/robert008/flutter_ocr_kit) - OCR + Layout Detection
+
 ## Acknowledgments
 
 - [PP-DocLayout](https://github.com/PaddlePaddle/PaddleOCR) - Document layout analysis model by PaddlePaddle
